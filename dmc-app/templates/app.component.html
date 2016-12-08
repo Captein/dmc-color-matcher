@@ -1,0 +1,18 @@
+<h2>{{title}}</h2>
+
+<table class="colors">
+  <tr *ngFor="let color of colors">
+    <td width=75px, height=75px, [ngStyle]=setBackground(color)></td>
+    <td>
+      <div>
+        <b>{{color.name}}</b>
+      </div>
+      <div>
+        <label>DMC </label>#{{color.id}}
+      </div>
+      <div>
+        <label>HEX </label>{{color.hex}}
+      </div>
+    </td>
+  </tr>
+</table>
