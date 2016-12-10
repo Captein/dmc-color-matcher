@@ -6,9 +6,11 @@ import { Component, Input } from '@angular/core';
   selector: 'color-search-bar',
   template: `
     <div>
-      <input [(ngModel)]="searchColor" placeholder="color" 
+      <input [(ngModel)]="searchColor"  placeholder="color"  width=200px
              [ngStyle]="{'border-color': (!searchColor || isValidColor(searchColor)) ? '#dddddd' : '#ff8888'}"/>
-      <button (click)="checkAndUpdate(searchColor)">Search</button>
+      <input [(ngModel)]="searchDepth"  placeholder="number"  type="number"  width=50px
+             [ngStyle]="{'border-color':'#dddddd'}"/>
+      <button (click)="checkAndUpdate()">Search</button>
       <div *ngIf="invalidSearchTerm"  style="color:red">
          Please enter a valid hexadecimal color.
       </div>
@@ -16,7 +18,6 @@ import { Component, Input } from '@angular/core';
   `,
   styles:[`
      input {
-       width: 200px;
        height: 30px;
      }
   `]
@@ -24,8 +25,9 @@ import { Component, Input } from '@angular/core';
 export class ColorSearchBarComponent {
   
   searchColor: string;
+  searchDepth: number;
   invalidSearchTerm = false;
-  @Input() updateSearchTerm: Function;
+  @Input() updateTableFunction: Function;
 
 
   isValidColor(str: string): boolean {
@@ -33,12 +35,14 @@ export class ColorSearchBarComponent {
   }
 
 
-  checkAndUpdate(searchTerm: string): void {
-    if (searchTerm && this.isValidColor(searchTerm)) {
+  checkAndUpdate(): void {
+    if (this.searchColor && this.isValidColor(this.searchColor)) {
       this.invalidSearchTerm = false;
-      if (searchTerm.charAt(0) != '#')
-        searchTerm = '#' + searchTerm;
-      this.updateSearchTerm(searchTerm);
+      if (this.searchColor.charAt(0) != '#')
+        this.searchColor = '#' + this.searchColor;
+      if (this.searchDepth <= 1)
+        this.searchDepth = 1;
+      this.updateTableFunction(this.searchColor, Math.round(this.searchDepth));
     }
     else
       this.invalidSearchTerm = true;

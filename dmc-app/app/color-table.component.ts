@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { DmcColor } from './dmc-color';
 import { ColorService } from './color.service';
@@ -8,11 +8,12 @@ import { ColorService } from './color.service';
 @Component({
   selector: 'color-table',
   template:  `
-  <table class="colors">
+  <color-search-bar [updateTableFunction]="getUpdateFunction()"></color-search-bar>
+  <table *ngIf="searchColor"  class="colors">
     <tr *ngFor="let color of colors; let first=first">
       <td *ngIf="first"
-          rowspan=5, width=100px, height=75px, [ngStyle]="{'background-color': searchColor}"></td>
-      <td width=75px, height=75px, [ngStyle]=setCellColor(color)></td>
+          [attr.rowspan]="searchDepth"  width=100px  height=75px  [ngStyle]="{'background-color': searchColor}"></td>
+      <td width=75px  height=75px  [ngStyle]=setCellColor(color)></td>
       <td>
         <div>
           <b>{{color.name}}</b></div>
@@ -27,30 +28,31 @@ import { ColorService } from './color.service';
   styles: [`
   table { 
     font-family: Arial, Helvetica, sans-serif;
-    width: 100%;
   }
   `],
   providers: [ ColorService ]
 })
-export class ColorTableComponent implements OnInit {
+export class ColorTableComponent{
   
   colors: DmcColor[];
-  @Input() searchColor: string;
+  searchColor: string;
+  searchDepth: number;
 
 
   constructor(private colorService: ColorService) { }
 
 
-  ngOnInit(): void {
-    this.getColors();
+  getUpdateFunction(): Function {
+    return ((term, depth) => { this.searchColor = term;
+                               this.searchDepth = depth;
+                               this.getColors();
+                             });
   }
 
 
   getColors(): void {
-    
-    this.colorService.matchColors(this.searchColor)
+    this.colorService.matchColors(this.searchColor, this.searchDepth)
                      .then(colors => this.colors = colors);
-    console.log("Type of colors array: ");
   }
 
 
@@ -60,3 +62,5 @@ export class ColorTableComponent implements OnInit {
   }
 
 } // ColorTableComponent
+
+

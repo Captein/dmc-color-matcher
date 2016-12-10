@@ -16,12 +16,14 @@ var ColorSearchBarComponent = (function () {
     ColorSearchBarComponent.prototype.isValidColor = function (str) {
         return (str.search('^#?(?:[0-9a-fA-F]{3}){1,2}$') != -1);
     };
-    ColorSearchBarComponent.prototype.checkAndUpdate = function (searchTerm) {
-        if (searchTerm && this.isValidColor(searchTerm)) {
+    ColorSearchBarComponent.prototype.checkAndUpdate = function () {
+        if (this.searchColor && this.isValidColor(this.searchColor)) {
             this.invalidSearchTerm = false;
-            if (searchTerm.charAt(0) != '#')
-                searchTerm = '#' + searchTerm;
-            this.updateSearchTerm(searchTerm);
+            if (this.searchColor.charAt(0) != '#')
+                this.searchColor = '#' + this.searchColor;
+            if (this.searchDepth <= 1)
+                this.searchDepth = 1;
+            this.updateTableFunction(this.searchColor, Math.round(this.searchDepth));
         }
         else
             this.invalidSearchTerm = true;
@@ -29,12 +31,12 @@ var ColorSearchBarComponent = (function () {
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Function)
-    ], ColorSearchBarComponent.prototype, "updateSearchTerm", void 0);
+    ], ColorSearchBarComponent.prototype, "updateTableFunction", void 0);
     ColorSearchBarComponent = __decorate([
         core_1.Component({
             selector: 'color-search-bar',
-            template: "\n    <div>\n      <input [(ngModel)]=\"searchColor\" placeholder=\"color\" \n             [ngStyle]=\"{'border-color': (!searchColor || isValidColor(searchColor)) ? '#dddddd' : '#ff8888'}\"/>\n      <button (click)=\"checkAndUpdate(searchColor)\">Search</button>\n      <div *ngIf=\"invalidSearchTerm\"  style=\"color:red\">\n         Please enter a valid hexadecimal color.\n      </div>\n    </div>\n  ",
-            styles: ["\n     input {\n       width: 200px;\n       height: 30px;\n     }\n  "]
+            template: "\n    <div>\n      <input [(ngModel)]=\"searchColor\"  placeholder=\"color\"  width=200px\n             [ngStyle]=\"{'border-color': (!searchColor || isValidColor(searchColor)) ? '#dddddd' : '#ff8888'}\"/>\n      <input [(ngModel)]=\"searchDepth\"  placeholder=\"number\"  type=\"number\"  width=50px\n             [ngStyle]=\"{'border-color':'#dddddd'}\"/>\n      <button (click)=\"checkAndUpdate()\">Search</button>\n      <div *ngIf=\"invalidSearchTerm\"  style=\"color:red\">\n         Please enter a valid hexadecimal color.\n      </div>\n    </div>\n  ",
+            styles: ["\n     input {\n       height: 30px;\n     }\n  "]
         }), 
         __metadata('design:paramtypes', [])
     ], ColorSearchBarComponent);

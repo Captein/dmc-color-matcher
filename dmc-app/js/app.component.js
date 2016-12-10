@@ -13,14 +13,10 @@ var AppComponent = (function () {
     function AppComponent() {
         this.title = 'DMC Color Matcher';
     }
-    AppComponent.prototype.getSearchColorFunction = function () {
-        var _this = this;
-        return (function (searchTerm) { return _this.searchColor = searchTerm; });
-    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            template: "\n  <h1>{{title}}</h1>\n  <color-search-bar [updateSearchTerm]=\"getSearchColorFunction()\"></color-search-bar>\n  <color-table *ngIf=\"searchColor\" [searchColor]=\"searchColor\"></color-table>\n  "
+            template: "\n  <h1>{{title}}</h1>\n  <color-table></color-table>\n  "
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

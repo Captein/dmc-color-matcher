@@ -16,14 +16,14 @@ var ColorService = (function () {
         this.http = http;
         this.colorsUrl = 'http://127.0.0.1:5000';
     }
-    ColorService.prototype.matchColors = function (searchColor) {
+    ColorService.prototype.matchColors = function (searchColor, searchDepth) {
         if (searchColor.charAt(0) == '#')
             searchColor = searchColor.substring(1);
-        var url = this.colorsUrl + "/color?hex=" + searchColor + "&n=5";
+        var url = this.colorsUrl + "/color?hex=" + searchColor + "&n=" + searchDepth;
         console.log("Getting from " + url);
         return this.http.get(url)
             .toPromise()
-            .then(function (response) { return response.json().data; }) // as DmcColor[])
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
     ColorService.prototype.handleError = function (error) {

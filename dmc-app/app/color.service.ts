@@ -15,17 +15,17 @@ export class ColorService {
   constructor(private http: Http) { }
 
 
-  matchColors(searchColor: string): Promise<DmcColor[]> {
+  matchColors(searchColor: string, searchDepth: number): Promise<DmcColor[]> {
     
     if (searchColor.charAt(0) == '#')
       searchColor = searchColor.substring(1);
     
-    const url = `${this.colorsUrl}/color?hex=${searchColor}&n=5`;
+    const url = `${this.colorsUrl}/color?hex=${searchColor}&n=${searchDepth}`;
     console.log(`Getting from ${url}`);
     
     return this.http.get(url)
                .toPromise()
-               .then(response => response.json().data)// as DmcColor[])
+               .then(response => response.json() as DmcColor[])
                .catch(this.handleError);
   }
 
